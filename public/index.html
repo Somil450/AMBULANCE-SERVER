@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚑 Ambulance Patient Monitoring System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🚑 AMBULANCE MONITORING SYSTEM</h1>
+                <div class="status-bar">
+                    <span id="connectionStatus" class="status disconnected">● Disconnected</span>
+                    <span id="sensorStatus" class="status disconnected">📡 Sensor: Offline</span>
+                    <span id="timestamp" class="timestamp"></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Left Panel: Patient Information -->
+            <aside class="left-panel panel">
+                <div class="panel-header">
+                    <h2>👤 PATIENT INFORMATION</h2>
+                </div>
+                <div class="panel-content">
+                    <div class="info-group">
+                        <label>ID</label>
+                        <div id="patientId" class="info-value">--</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Name</label>
+                        <div id="patientName" class="info-value">--</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Age</label>
+                        <div id="patientAge" class="info-value">--</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Gender</label>
+                        <div id="patientGender" class="info-value">--</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Blood Type</label>
+                        <div id="patientBlood" class="info-value badge">--</div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="panel-header">
+                    <h2>🚨 MEDICAL CONDITION</h2>
+                </div>
+                <div class="panel-content">
+                    <div class="info-group">
+                        <label>Diagnosis</label>
+                        <div id="patientDisease" class="info-value disease-alert">--</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Symptoms</label>
+                        <div id="patientSymptoms" class="info-value">--</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Medications</label>
+                        <div id="patientMeds" class="info-value">--</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Allergies</label>
+                        <div id="patientAllergies" class="info-value allergy-alert">--</div>
+                    </div>
+                    <div class="info-group">
+                        <label>Emergency Contact</label>
+                        <div id="patientContact" class="info-value">--</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center Panel: Real-time Vitals -->
+            <section class="center-panel">
+                <!-- Vital Signs Monitors -->
+                <div class="vitals-grid">
+                    <!-- Heart Rate -->
+                    <div class="vital-card heart-rate">
+                        <div class="vital-icon">❤️</div>
+                        <div class="vital-label">HEART RATE</div>
+                        <div class="vital-value" id="hrValue">--</div>
+                        <div class="vital-unit">BPM</div>
+                        <div id="hrStatus" class="vital-status">NORMAL</div>
+                        <div class="vital-bar">
+                            <div id="hrBar" class="bar-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- SpO2 -->
+                    <div class="vital-card spo2">
+                        <div class="vital-icon">🫁</div>
+                        <div class="vital-label">OXYGEN LEVEL</div>
+                        <div class="vital-value" id="spo2Value">--</div>
+                        <div class="vital-unit">%</div>
+                        <div id="spo2Status" class="vital-status">NORMAL</div>
+                        <div class="vital-bar">
+                            <div id="spo2Bar" class="bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graphs Section -->
+                <div class="graphs-section">
+                    <div class="graph-card">
+                        <div class="graph-header">
+                            <h3>💓 HEART RATE TREND</h3>
+                            <span id="hrLastUpdate" class="update-time">Last update: --</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="heartRateChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="graph-card">
+                        <div class="graph-header">
+                            <h3>🫁 OXYGEN SATURATION TREND</h3>
+                            <span id="spo2LastUpdate" class="update-time">Last update: --</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="spo2Chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts -->
+                <div class="alerts-section" id="alertsSection">
+                    <div class="alert-item alert-info">
+                        <span class="alert-icon">ℹ️</span>
+                        <span class="alert-text">Waiting for sensor data...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Statistics -->
+            <aside class="right-panel panel">
+                <div class="panel-header">
+                    <h2>📊 STATISTICS</h2>
+                </div>
+                <div class="panel-content">
+                    <div class="stat-item">
+                        <div class="stat-label">Avg Heart Rate</div>
+                        <div id="avgHR" class="stat-value">-- bpm</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Max Heart Rate</div>
+                        <div id="maxHR" class="stat-value">-- bpm</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Min Heart Rate</div>
+                        <div id="minHR" class="stat-value">-- bpm</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Avg SpO2</div>
+                        <div id="avgSpo2" class="stat-value">-- %</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Max SpO2</div>
+                        <div id="maxSpo2" class="stat-value">-- %</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Min SpO2</div>
+                        <div id="minSpo2" class="stat-value">-- %</div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="panel-header">
+                        <h2>⚠️ ALERT STATUS</h2>
+                    </div>
+
+                    <div class="alert-badges">
+                        <div class="badge-item" id="hrAlert">
+                            <span class="badge-dot ok"></span>
+                            <span>Heart Rate</span>
+                        </div>
+                        <div class="badge-item" id="spo2Alert">
+                            <span class="badge-dot ok"></span>
+                            <span>SpO2 Level</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🚑 Ambulance Monitoring System v1.0 | Real-time Patient Vital Signs | Emergency Response Ready</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
